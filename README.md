@@ -9,6 +9,7 @@ This is a bridge between DDS and MQTT and tested with PX4(Fast DDS) and PahoMQTT
 ```
 git clone https://github.com/PX4/PX4-Autopilot.git --recursive
 bash ./PX4-Autopilot/Tools/setup/ubuntu.sh
+sudo snap install ant
 ```
 ### Step 2 - Install QgroundControl
 ```
@@ -20,8 +21,27 @@ wget https://d176tv9ibo4jno.cloudfront.net/latest/QGroundControl.AppImage
 chmod +x ./QGroundControl.AppImage
 ```
 ### Step 3 - Fast DDS Installation
-make sure Java JDK 11 is installed.
+make sure that Java JDK 11 is installed.
+make sure that Gradle is installed. It's 6.3 not 7.x.
 ```
+git clone https://github.com/eProsima/foonathan_memory_vendor.git
+cd foonathan_memory_vendor
+mkdir build && cd build
+cmake ..
+sudo cmake --build . --target install
+
+git clone --recursive https://github.com/eProsima/Fast-DDS.git -b v2.0.2 ~/FastDDS-2.0.2
+cd ~/FastDDS-2.0.2
+mkdir build
+cd build
+cmake -DTHIRDPARTY=ON -DSECURITY=ON -DCOMPILE_EXAMPLES=ON -DPERFORMANCE_TESTS=ON ..
+make -j$(nproc --all)
+sudo make install
+
+git clone --recursive https://github.com/eProsima/Fast-DDS-Gen.git -b v1.0.4 ~/Fast-RTPS-Gen \
+    && cd ~/Fast-RTPS-Gen \
+    && gradle assemble \
+    && sudo env "PATH=$PATH" gradle install
 ```
 ### Step 4 - Test out PX4 + QgroundControl with jMAVSim
 ```
