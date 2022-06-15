@@ -279,4 +279,4 @@ or the CMAKE_CXX_COMPILER flag can be used:
 $ cmake -DCMAKE_CXX_COMPILER=clang++
 ```
 ### Step 8 - combine Fast DDS listener with MQTT client.
-
+in your C++ code, need to link paho-mqttpp3 paho-mqtt3c fastcdr fastrtps to bridge both DDS and MQTT library.
